@@ -39,6 +39,7 @@
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
+      <el-button :loading="loading" type="primary" @click="btns">确认</el-button>
     </div>
   </el-dialog>
 </template>
@@ -74,7 +75,8 @@ export default {
       }
     }
     return {
-      dialog: false, loading: false, form: { username: '', email: '', enabled: 'false', roles: [], job: { id: '' }, dept: { id: '' }, phone: null },
+      dialog: false, loading: false, 
+      form: { username: '', email: '', enabled: 'false', roles: [], job: { id: '' }, dept: { id: '' }, phone: null },
       roleIds: [], roles: [], depts: [], deptId: null, jobId: null, jobs: [], level: 3,
       rules: {
         username: [
@@ -206,8 +208,12 @@ export default {
       }).catch(err => {
         console.log(err.response.data.message)
       })
+    },
+    btns(){
+      console.log(this.roles);
+      
     }
-  }
+  },
 }
 </script>
 

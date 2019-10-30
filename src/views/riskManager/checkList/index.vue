@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--工具栏-->
-    <div class="head-container">
+    <div class="head-container" v-show="this.switch">
       <!-- 搜索 -->
       <el-input
         v-model="query.value"
@@ -46,9 +46,10 @@
       </div>
     </div>
     <!--表单组件-->
-    <eForm ref="form" :is-add="isAdd" :dicts="dicts" />
+    <eForm ref="form" :is-add="isAdd" :dicts="dicts"/>
+    <checkInfo  ref="forms" :is-add="isAdd" :dicts="dicts"/>
     <!--表格渲染-->
-    <el-table :data="this.data" v-loading="loading" size="small" border stripe style="width: 100%;">
+    <el-table :data="this.data" v-loading="loading" size="small" border stripe style="width: 100%;" v-show="this.switch">
       <el-table-column type="selection" width="40" align="center"></el-table-column>
       <el-table-column prop="name" label="检查单名称" width="150" align="center"></el-table-column>
       <el-table-column prop="sysWbsName" label="专业类型" width="180" align="center"></el-table-column>
@@ -62,18 +63,30 @@
       <el-table-column
         v-if="checkPermission(['ADMIN','USERJOB_ALL','USERJOB_EDIT','USERJOB_DELETE'])"
         label="操作"
-        width="130px"
+        width="160px"
         align="center"
         fixed="right"
       >
+      <!-- ,query:{id:'xxx',name:'xxx'} -->
         <template slot-scope="scope">
+          <!-- 详情 -->
           <el-button
+            style="margin-right:-10px"
             v-permission="['ADMIN','USERJOB_ALL','USERJOB_EDIT']"
             size="mini"
             type="primary"
+            icon="el-icon-info"
+            @click="info(scope.row.id)"
+          />
+          <!-- 编辑 -->
+          <el-button
+            v-permission="['ADMIN','USERJOB_ALL','USERJOB_EDIT']"
+            size="mini"
+            type="warning"
             icon="el-icon-edit"
             @click="edit(scope.row)"
           />
+          <!-- 删除 -->
           <el-popover
             v-permission="['ADMIN','USERJOB_ALL','USERJOB_DELETE']"
             :ref="scope.row.id"
@@ -103,6 +116,7 @@
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
       @current-change="pageChange"
+      v-show="this.switch"
     />
   </div>
 </template>
@@ -114,12 +128,16 @@ import initDict from "@/mixins/initDict";
 import { del } from "@/api/riskCheck";
 import { parseTime } from "@/utils/index";
 import eForm from "./form";
+import checkInfo from "./checkInfo";
 export default {
   name: "Job",
-  components: { eForm },
+  // ,checkInfo
+  components: {eForm,checkInfo},
   mixins: [initData, initDict],
   data() {
     return {
+      infoID:0,
+      switch:"true",
       delLoading: false,
       enabledTypeOptions: [
         { key: "true", display_name: "正常" },
@@ -136,11 +154,15 @@ export default {
     });
   },
   methods: {
+    getMsgFormSon(data){
+       this.switch = data
+       console.log(this.switch)
+    },
     parseTime,
     checkPermission,
     beforeInit() {
       this.url = "api/riskChecklists";
-      const sort = "createdTime";
+      const sort = "createdTime,desc";
       this.params = { page: this.page, size: this.size, sort: sort }; //异步传参
       const query = this.query;
       const value = query.value;
@@ -154,8 +176,6 @@ export default {
       return true;
     },
     subDelete(id) {
-      // console.log(id);
-
       this.delLoading = true;
       del(id)
         .then(res => {
@@ -175,21 +195,28 @@ export default {
           console.log(err.response.data.message);
         });
     },
+    info(id) {
+      this.$refs.forms.dialogTableVisible = true;
+      this.infoID = id
+      // console.log(this.infoID);
+      
+    },
     add() {
       this.isAdd = true;
       this.$refs.form.getDepts();
       this.$refs.form.dialog = true;
     },
     edit(data) {
-      this.isAdd = false;
-      const _this = this.$refs.form;
-      _this.getDepts();
+      this.isAdd = false;//判断标题
+      const _this = this.$refs.form;//获取表单
       _this.form = {
         id: data.id,
         name: data.name,
-        createTime: data.createdTime,
+        sysWbsName: data.sysWbsName,
+        wbsName: data.wbsName
       };
       _this.dialog = true;
+      
     }
   }
 };

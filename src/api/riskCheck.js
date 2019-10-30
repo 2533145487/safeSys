@@ -30,8 +30,14 @@ export function del(id) {
 
 export function edit(data) {
   return request({
-    url: 'api/api/riskChecklist',
+    url: 'api/riskChecklist',
     method: 'put',
     data
+  })
+}
+export function getInfo(id) {
+  return request({
+    url: 'api/riskChecklistbyup/' + id,
+    method: 'get'
   })
 }

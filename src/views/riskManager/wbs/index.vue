@@ -104,14 +104,12 @@ export default {
     add(id) {
       this.isAdd = true    
      const _this = this.$refs.form
-      _this.getPermissions()
       _this.form = { id: id}
       _this.dialog = true
     },
     edit(data) {
       this.isAdd = false
       const _this = this.$refs.form
-      _this.getPermissions()
       _this.form = { id: data.id, name: data.name, num: data.num}
       _this.dialog = true
       

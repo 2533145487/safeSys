@@ -227,6 +227,8 @@ export default {
       _this.jobId = data.job.id
       _this.getJobs(_this.deptId)
       _this.dialog = true
+      // console.log(_this.form);
+      
     }
   }
 }
