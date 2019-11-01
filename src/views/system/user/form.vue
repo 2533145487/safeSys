@@ -186,6 +186,8 @@ export default {
     getJobs(id) {
       getAllJob(id).then(res => {
         this.jobs = res.content
+        console.log(res.content);
+        
       }).catch(err => {
         console.log(err.response.data.message)
       })
@@ -209,10 +211,6 @@ export default {
         console.log(err.response.data.message)
       })
     },
-    btns(){
-      console.log(this.roles);
-      
-    }
   },
 }
 </script>

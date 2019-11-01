@@ -47,7 +47,7 @@
     </div>
     <!--表单组件-->
     <eForm ref="form" :is-add="isAdd" :dicts="dicts"/>
-    <checkInfo  ref="forms" :is-add="isAdd" :dicts="dicts"/>
+    <checkInfo  ref="forms" :checkInfo="this.checkInfo" :dicts="dicts"/>
     <!--表格渲染-->
     <el-table :data="this.data" v-loading="loading" size="small" border stripe style="width: 100%;" v-show="this.switch">
       <el-table-column type="selection" width="40" align="center"></el-table-column>
@@ -67,7 +67,6 @@
         align="center"
         fixed="right"
       >
-      <!-- ,query:{id:'xxx',name:'xxx'} -->
         <template slot-scope="scope">
           <!-- 详情 -->
           <el-button
@@ -84,6 +83,7 @@
             size="mini"
             type="warning"
             icon="el-icon-edit"
+            :loading="loading"
             @click="edit(scope.row)"
           />
           <!-- 删除 -->
@@ -125,25 +125,24 @@
 import checkPermission from "@/utils/permission";
 import initData from "@/mixins/initData";
 import initDict from "@/mixins/initDict";
-import { del } from "@/api/riskCheck";
+import { del,getAllInfo} from "@/api/riskCheck";
 import { parseTime } from "@/utils/index";
 import eForm from "./form";
 import checkInfo from "./checkInfo";
 export default {
   name: "Job",
-  // ,checkInfo
   components: {eForm,checkInfo},
   mixins: [initData, initDict],
   data() {
     return {
-      infoID:0,
+      loading:false,
+      checkInfo:null,
       switch:"true",
       delLoading: false,
       enabledTypeOptions: [
         { key: "true", display_name: "正常" },
         { key: "false", display_name: "禁用" }
       ]
-      // values:null
     };
   },
   created() {
@@ -196,10 +195,16 @@ export default {
         });
     },
     info(id) {
-      this.$refs.forms.dialogTableVisible = true;
-      this.infoID = id
-      // console.log(this.infoID);
-      
+        if (id === null || id === undefined) {
+            this.$refs.forms.dialogTableVisible = false;
+          }else{
+              this.$refs.forms.dialogTableVisible = true;
+      getAllInfo(id).then(res=>{
+        this.checkInfo=res
+        console.log(this.checkInfo);      
+      })
+          }
+    
     },
     add() {
       this.isAdd = true;

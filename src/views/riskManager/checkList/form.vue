@@ -1,26 +1,14 @@
 <template>
-  <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :before-close="cancel" :title="isAdd ? '新增' : '编辑'" append-to-body width="570px">
-    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" style="lable-width:100px">
-      <el-form-item label="检查单名称" prop="username">
-        <el-input v-model="form.username" style="width: 300px;" placeholder="输入检查单名称"/>
-      </el-form-item>
-      <el-form-item label="专业类型" style="lable-width:100px;margin-left:20px">
-        <treeselect v-model="deptId" :options="depts"  placeholder="选择专业类型" @select="selectFun" style="width: 300px;"/>
-      </el-form-item>
-      <el-form-item style="lable-width:100px;margin-left:20px" label="标准wbs" >
-        <el-select v-model="roleIds" style="width: 300px;" multiple placeholder="请选择标准wbs">
-          <el-option
-            v-for="(item, index) in roles"
-            :disabled="level !== 1 && item.level <= level"
-            :key="item.name + index"
-            :label="item.name"
-            :value="item.id"/>
-        </el-select>
-      </el-form-item>
-        <el-form-item label="检查项" style="lable-width:100px;margin-bottom:0;margin-left:35px">
-        <treeselect v-model="deptId" :options="depts" style="width: 178px" placeholder="选择检查项" @select="selectFun" />
-      </el-form-item>
-    </el-form>
+  <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :before-close="cancel" :title="isAdd ? '新增' : '编辑'" append-to-body width="60%">
+   <table style="table-layout: fixed;">
+        <thead style="backgroung-color:red">
+          <tr bgcolor="#F9F9FA">
+            <th style="width:100px">检查项</th>
+            <th>检查内容</th>
+            <th style="width:200px">控制类型</th>
+          </tr>
+        </thead>
+   </table>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
       <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>

@@ -35,7 +35,8 @@ export function edit(data) {
     data
   })
 }
-export function getInfo(id) {
+//数据回显和详情
+export function getAllInfo(id) {
   return request({
     url: 'api/riskChecklistbyup/' + id,
     method: 'get'
