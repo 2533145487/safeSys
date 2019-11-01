@@ -41,7 +41,6 @@
               <td style="border-left:none;border-right:none;border-top:none;width:200px">{{item.controltype}}</td>
             </tbody>
           </td>
-          <!-- <td>555 77 855</td> -->
         </tr>
       </table>
     </el-dialog>

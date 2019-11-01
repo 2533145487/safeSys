@@ -72,12 +72,14 @@ export const constantRouterMap = [
         meta: { title: '个人中心', icon: 'user' }
       }
     ]
-  }
+  },
+  // {path:'/checkForm',component:()=>import('@/views/riskManager/checkList/checkForm/index'),
+// }
   // { path: '*', redirect: '/404', hidden: true }
 ]
 
 export default new Router({
-  mode: 'history',
+  mode: 'history',  
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })

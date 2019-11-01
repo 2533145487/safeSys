@@ -46,7 +46,7 @@
       </div>
     </div>
     <!--表单组件-->
-    <eForm ref="form" :is-add="isAdd" :dicts="dicts"/>
+    <!-- <eForm ref="form" :is-add="isAdd" :dicts="dicts"/> -->
     <checkInfo  ref="forms" :checkInfo="this.checkInfo" :dicts="dicts"/>
     <!--表格渲染-->
     <el-table :data="this.data" v-loading="loading" size="small" border stripe style="width: 100%;" v-show="this.switch">
@@ -78,13 +78,14 @@
             @click="info(scope.row.id)"
           />
           <!-- 编辑 -->
+          <!-- <router-link to="/checkForm"> -->
           <el-button
             v-permission="['ADMIN','USERJOB_ALL','USERJOB_EDIT']"
             size="mini"
             type="warning"
             icon="el-icon-edit"
             :loading="loading"
-            @click="edit(scope.row)"
+            @click="edit"
           />
           <!-- 删除 -->
           <el-popover
@@ -127,11 +128,12 @@ import initData from "@/mixins/initData";
 import initDict from "@/mixins/initDict";
 import { del,getAllInfo} from "@/api/riskCheck";
 import { parseTime } from "@/utils/index";
-import eForm from "./form";
+// import eForm from "./form";
 import checkInfo from "./checkInfo";
 export default {
   name: "Job",
-  components: {eForm,checkInfo},
+  // eForm,
+  components: {checkInfo},
   mixins: [initData, initDict],
   data() {
     return {
@@ -211,16 +213,19 @@ export default {
       this.$refs.form.getDepts();
       this.$refs.form.dialog = true;
     },
-    edit(data) {
-      this.isAdd = false;//判断标题
-      const _this = this.$refs.form;//获取表单
-      _this.form = {
-        id: data.id,
-        name: data.name,
-        sysWbsName: data.sysWbsName,
-        wbsName: data.wbsName
-      };
-      _this.dialog = true;
+    edit() {
+      // alert('1  0')
+      this.$router.push('/riskManager/checkForm')
+
+      // this.isAdd = false;//判断标题
+      // const _this = this.$refs.form;//获取表单
+      // _this.form = {
+      //   id: data.id,
+      //   name: data.name,
+      //   sysWbsName: data.sysWbsName,
+      //   wbsName: data.wbsName
+      // };
+      // _this.dialog = true;
       
     }
   }
